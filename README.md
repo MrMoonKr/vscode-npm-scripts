@@ -3,6 +3,9 @@
 - Extension 작성시 TreeView 구성 참고용으로 Clone 함.
 - 최신 프로젝트 구성으로 업데이트 예정.
 
+## Dependencies
+- @types/vscode + vscode-test
+
 # NPM Scripts
 
 [![Downloads](https://vsmarketplacebadge.apphb.com/installs/traBpUkciP.vscode-npm-scripts.svg)](https://vsmarketplacebadge.apphb.com/installs/traBpUkciP.vscode-npm-scripts.svg)

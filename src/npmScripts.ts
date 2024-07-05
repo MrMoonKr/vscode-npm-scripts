@@ -35,7 +35,7 @@ export class NpmScriptsNodeProvider
   }
 
   refresh(): void {
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire( null );
   }
 
   getTreeItem(element: ScriptTreeItem | WorkspaceTreeItem): TreeItem {
@@ -46,7 +46,7 @@ export class NpmScriptsNodeProvider
     element?: ScriptTreeItem | WorkspaceTreeItem
   ): Thenable<ScriptTreeItem[] | WorkspaceTreeItem[]> {
     return new Promise((resolve: Function) => {
-      const folders: WorkspaceFolder[] = workspace.workspaceFolders;
+      const folders: readonly WorkspaceFolder[] = vscode.workspace.workspaceFolders;
       if (element) {
         // Workspace render scripts
         const folder: WorkspaceFolder = folders.find(
@@ -77,7 +77,7 @@ export class NpmScriptsNodeProvider
    */
   private renderMultipleWorkspaces(
     resolve: Function,
-    folders: WorkspaceFolder[]
+    folders: readonly WorkspaceFolder[]
   ): void {
     resolve(this.mkTreeItemsForWorkspace(folders));
   }
@@ -106,9 +106,9 @@ export class NpmScriptsNodeProvider
   }
 
   private mkTreeItemsForWorkspace(
-    folders: WorkspaceFolder[]
+    folders: readonly WorkspaceFolder[]
   ): WorkspaceTreeItem[] {
-    const workspaceFolders: WorkspaceFolder[] = workspace.workspaceFolders;
+    const workspaceFolders: readonly WorkspaceFolder[] = vscode.workspace.workspaceFolders;
     const treeItems: WorkspaceTreeItem[] = [];
     folders.forEach((folder: WorkspaceFolder): void => {
       const workspaceRoot: string = folder.uri.fsPath;

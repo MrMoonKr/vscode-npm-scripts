@@ -3,22 +3,21 @@
     "version": "0.1.0",
     "configurations": [
         {
-            "name": "Launch Extension",
+            "name": "Run Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceRoot}"
             ],
-            "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceRoot}/out/src/**/*.js"
             ],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "npm: watch"
         },
         {
-            "name": "Launch Tests",
+            "name": "Run Extension Tests",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -26,18 +25,16 @@
                 "--extensionDevelopmentPath=${workspaceRoot}",
                 "--extensionTestsPath=${workspaceRoot}/out/test"
             ],
-            "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceRoot}/out/test/**/*.js"
             ],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "npm: watch"
         },
         {
             "type": "node",
             "request": "attach",
             "name": "Attach to Extension Host",
-            "protocol": "inspector",
             "port": 5870,
             "restart": true,
             "outFiles": [

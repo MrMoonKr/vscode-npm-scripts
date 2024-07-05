@@ -8,7 +8,7 @@ import {
   WorkspaceConfiguration,
   workspace
 } from "vscode";
-import * as path from "path";
+//import * as path from "path";
 import * as Message from "./messages";
 import { ConfigOptions, NPM_SCRIPTS } from "./constants";
 import { ITerminalMap } from "./types";
