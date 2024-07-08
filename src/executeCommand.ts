@@ -14,63 +14,79 @@ import { ConfigOptions, NPM_SCRIPTS } from "./constants";
 import { ITerminalMap } from "./types";
 import { makeTerminalPrettyName } from "./utils";
 
-function resolveAutoPackageManager () {
-  const rootPath: string = vscode.workspace.rootPath || ".";
 
-  if (fs.existsSync(path.join(rootPath, "package-lock.json"))) {
+/**
+ * 설정파일 체크하여 패키지 매니저 이름 반환
+ * @returns {string} 'npm' | 'yarn' | 'pnpm'
+ */
+function resolveAutoPackageManager() {
+
+    //const rootPath: string = vscode.workspace.rootPath || ".";
+    const rootPath: string = vscode.workspace.workspaceFolders[ 0 ].uri.path || ".";
+
+    if ( fs.existsSync( path.join( rootPath, "package-lock.json" ) ) ) {
+        return "npm"
+    }
+
+    if ( fs.existsSync( path.join( rootPath, "pnpm-lock.yaml" ) ) ) {
+        return "pnpm"
+    }
+
+    if ( fs.existsSync( path.join( rootPath, "yarn-lock.json" ) ) ) {
+        return "yarn"
+    }
+
     return "npm"
-  }
-
-  if (fs.existsSync(path.join(rootPath, "pnpm-lock.yaml"))) {
-    return "pnpm"
-  }
-  
-  if (fs.existsSync(path.join(rootPath, "yarn-lock.json"))) {
-    return "yarn"
-  }
-
-  return "npm"
 }
 
-export function executeCommand(terminalMapping: ITerminalMap) {
-  return function(task: string, cwd: string) {
-    let packageManager: string =
-      workspace.getConfiguration("npm").get("packageManager") || "npm";
+/**
+ * 
+ * @param terminalMapping 
+ * @returns { (task: string, cwd: string) => void }
+ */
+export function executeCommand( terminalMapping: ITerminalMap ) {
 
-    if (packageManager === "auto") {
-      packageManager = resolveAutoPackageManager()
-    }
+    return function ( task: string, cwd: string ) {
 
-    const command: string = `${packageManager} run ${task}`;
+        let packageManager: string =
+            workspace.getConfiguration( "npm" ).get( "packageManager" ) || "npm";
 
-    const config: WorkspaceConfiguration = workspace.getConfiguration(
-      NPM_SCRIPTS
-    );
+        if ( packageManager === "auto" ) {
+            packageManager = resolveAutoPackageManager()
+        }
 
-    if (config[ConfigOptions.showStart]) {
-      const hideMessages: MessageItem = { title: Message.HideMessages };
-      vscode.window
-        .showInformationMessage(command, hideMessages)
-        .then((result: MessageItem) => {
-          if (result === hideMessages) {
-            config.update(ConfigOptions.showStart, false, false);
-            vscode.window.showInformationMessage(Message.HideMessagesExtra);
-          }
-        });
-    }
+        const command: string = `${ packageManager } run ${ task }`;
 
-    const name: string = makeTerminalPrettyName(cwd, task);
-    let terminal: Terminal;
+        const config: WorkspaceConfiguration = workspace.getConfiguration(
+            NPM_SCRIPTS
+        );
 
-    if (terminalMapping.has(name)) {
-      terminal = terminalMapping.get(name);
-    } else {
-      const terminalOptions: TerminalOptions = { cwd, name };
-      terminal = vscode.window.createTerminal(terminalOptions);
-      terminalMapping.set(name, terminal);
-    }
+        if ( config[ ConfigOptions.showStart ] ) {
 
-    terminal.show();
-    terminal.sendText(command);
-  };
+            const hideMessages: MessageItem = { title: Message.HideMessages };
+            vscode.window
+                .showInformationMessage( command, hideMessages )
+                .then( ( result: MessageItem ) => {
+                    if ( result === hideMessages ) {
+                        config.update( ConfigOptions.showStart, false, false );
+                        vscode.window.showInformationMessage( Message.HideMessagesExtra );
+                    }
+                } );
+        }
+
+        const name: string = makeTerminalPrettyName( cwd, task );
+        let terminal: Terminal;
+
+        if ( terminalMapping.has( name ) ) {
+            terminal = terminalMapping.get( name );
+        } 
+        else {
+            const terminalOptions: TerminalOptions = { cwd, name };
+            terminal = vscode.window.createTerminal( terminalOptions );
+            terminalMapping.set( name, terminal );
+        }
+
+        terminal.show();
+        terminal.sendText( command ); // excuteCommand
+    };
 }

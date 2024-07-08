@@ -5,8 +5,14 @@
 
 ## Dependencies
 - @types/vscode + vscode-test
+- typescript
+- @types/node
+- ...
 
-# NPM Scripts
+## vscode-npm-scripts ( NPM Scripts )
+
+설치 필요 없는 익스텐션입니다.  
+VS Code 에 비슷한 기능이 내장되어 있습니다.
 
 [![Downloads](https://vsmarketplacebadge.apphb.com/installs/traBpUkciP.vscode-npm-scripts.svg)](https://vsmarketplacebadge.apphb.com/installs/traBpUkciP.vscode-npm-scripts.svg)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating/traBpUkciP.vscode-npm-scripts.svg)](https://vsmarketplacebadge.apphb.com/rating/traBpUkciP.vscode-npm-scripts.svg)
